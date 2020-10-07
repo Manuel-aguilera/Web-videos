@@ -1,0 +1,109 @@
+Instalación de React con la mi configuración personalizada:
+
+	-npx create-react-app platzivideo
+	-npm i @babel/core @babel/preset-env @babel/preset-react babel-loader -D
+	-npm i @babel/plugin-proposal-class-properties webpack webpack-cli clean-webpack-plugin webpack-dev-server html-webpack-plugin html-loader mini-css-extract-plugin node-sass sass-loader css-loader file-loader -D
+
+	Configuramos babel para entender JS moderno y jsx con react, también utilizamos un plugin para la sintaxis nueva de las arrow functions:
+
+	{
+		"presets": ["@babel/preset-env", "@babel/preset-react"],
+		"plugins": ["@babel/plugin-proposal-class-properties"]
+	}
+
+	Configuramos webpack para JS, JSX, CSS, SCSS, HTML, SVG, JPG, PNG, GIF, archivos woff, ttf, eot que usa bootstrap e icomoon.
+
+
+	const path = require("path");
+
+	const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+	const HtmlWebPackPlugin = require("html-webpack-plugin");
+	const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+	module.exports = {
+		entry: "./src/index.js",
+		output: {
+			path: path.resolve(__dirname, "dist"),
+			filename: "bundle.js",
+		},
+		resolve: {
+			extensions: [".js", ".jsx"],
+		},
+		module: {
+			rules: [
+				{
+					test: /\.(js|jsx)$/,
+					exclude: /node_modules/,
+					use: {
+						loader: "babel-loader",
+						options: {
+							presets: [
+								"@babel/preset-env",
+								{
+									plugins: ["@babel/plugin-proposal-class-properties"],
+								},
+							],
+						},
+					},
+				},
+				{
+					test: /\.html$/,
+					use: [
+						{
+							loader: "html-loader",
+						},
+					],
+				},
+				{
+					test: /\.(s*)css$/,
+					use: [
+						{
+							loader: MiniCssExtractPlugin.loader,
+							options: {
+								name: "[name].[ext]",
+								outputPath: "assets/",
+							},
+						},
+
+						{ loader: "css-loader" },
+						{ loader: "sass-loader" },
+					],
+				},
+				{
+					test: /\.(png|jpg|gif|svg)$/,
+					use: [{ loader: "file-loader" }],
+				},
+				{
+					test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
+					use: [
+						{
+							loader: "file-loader",
+							options: {
+								name: "[name].[ext]",
+								outputPath: "fonts/",
+							},
+						},
+					],
+				},
+			],
+		},
+		plugins: [
+			new HtmlWebPackPlugin({
+				template: "./public/index.html",
+				filename: "./index.html",
+			}),
+			new MiniCssExtractPlugin(),
+			new CleanWebpackPlugin(),
+		],
+	};
+
+Configuración de scripts para webpack:
+
+	"buildP": "webpack-dev-server --open --mode development",
+	"startP": "webpack --mode production"
+
+Configuramos eslint
+
+	npm i eslint babel-eslint eslint-config-airbnb eslint-plugin-import 
+	eslint-plugin-react eslint-plugin-jsx-a11y -D
+    Usamos la configuracion de airbnb de eslint
