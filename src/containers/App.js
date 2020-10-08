@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import '../assets/styles/App.scss';
 import Search from '../components/Search';
@@ -7,7 +7,29 @@ import Carousel from '../components/Carousel';
 import CarouselItem from '../components/CarouselItem';
 import Footer from '../components/Footer';
 
-function App() {
+const App = () => {
+  const [videos, setVideos] = useState([]);
+  useEffect(() => {
+    //con async await
+    // const fetchVideos = async () => {
+    //   try {
+    //     const response = await fetch('http://localhost:3000/initialState');
+    //     const data = await response.json();
+    //     return setVideos(data);
+    //   } catch {
+    //     console.log(error.message);
+    //   }
+    // };
+    // fetchVideos();
+
+    fetch('http://localhost:3000/initialState')
+      .then((response) => response.json())
+      .then((data) => setVideos(data));
+
+  }, []);
+
+  console.log(videos);
+
   return (
     <div className='App'>
       <Header />
@@ -40,6 +62,6 @@ function App() {
       <Footer />
     </div>
   );
-}
+};
 
 export default App;

@@ -15,6 +15,7 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
+		"server": "npx json-server --watch initialState.json",
 		"initD": "webpack-dev-server --open --mode development",
 		"initP": "webpack --mode production"
 	},
